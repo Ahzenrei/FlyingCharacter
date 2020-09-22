@@ -26,25 +26,26 @@ int main()
     GameManager gm;
     gm.init();
     Player player(50,10);
-
+    Vec2<int> velocity;
     while (1){
         //Input
+        velocity = player.GetInput();
 
         if (gm.clock.getElapsedSeconds(false) > FRAMERATE)
         {
+            player.Move(velocity);
             //Reset timer
             gm.clock.reset();
 
             //Flush buffer
             gm.Flush();
-
             //write buffer
             for (int i = 0; i < player.sizeX; i++)
             {
                 for (int j = 0; j < player.sizeY; j++)
                 {
-                    gm.buffer[player.y + j][player.x + i].Char.AsciiChar = player.idleLeft[player.frame][i + player.sizeX * j];
-                    gm.buffer[player.y + j][player.x + i].Attributes = player.color;
+                    gm.buffer[player.posY + j][player.posX + i].Char.AsciiChar = player.idleLeft[player.frame][i + player.sizeX * j];
+                    gm.buffer[player.posY + j][player.posX + i].Attributes = player.color;
                 }
             }
             

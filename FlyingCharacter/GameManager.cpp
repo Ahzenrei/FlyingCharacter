@@ -1,5 +1,6 @@
 #include "GameManager.h"
 #include "Windows.h"
+#include <iostream>
 
 GameManager::GameManager()
 {
@@ -28,9 +29,9 @@ void GameManager::WriteToConsole()
 
 void GameManager::Flush()
 {
-    for (int i = 0; i < SCREEN_WIDTH - 1; i++)
+    for (int i = 0; i < SCREEN_WIDTH; i++)
     {
-        for (int j = 0; j < SCREEN_HEIGHT - 1; j++)
+        for (int j = 0; j < SCREEN_HEIGHT; j++)
         {
             buffer[j][i].Char.AsciiChar = ' ';
         }

@@ -1,8 +1,15 @@
 #pragma once
+
+#include "Vec2.h"
+
 class Player
 {
 public:
 	Player(int x, int y);
+	void Move(Vec2<int>);
+	Vec2<int> GetInput();
+
+public:
 	const char idleLeft[2][30] =
 	{
 		{
@@ -29,7 +36,7 @@ public:
 	const int sizeX = 4;
 	const int sizeY = 6;
 	bool frame = false;
-	int x;
-	int y;
+	int posX;
+	int posY;
 };
 

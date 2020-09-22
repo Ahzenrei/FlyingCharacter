@@ -2,10 +2,8 @@
 #include "Player.h"
 #include "NYTimer.h"
 #include <memory>
-
-#define SCREEN_WIDTH 100
-#define SCREEN_HEIGHT 20
-#define FRAMERATE 0.2
+#include <sstream>
+#include "World.h"
 
 
 class GameManager

@@ -149,6 +149,8 @@
     <ClInclude Include="GameManager.h" />
     <ClInclude Include="NYTimer.h" />
     <ClInclude Include="Player.h" />
+    <ClInclude Include="Vec2.h" />
+    <ClInclude Include="World.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
