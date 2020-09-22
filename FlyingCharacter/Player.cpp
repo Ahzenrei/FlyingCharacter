@@ -24,7 +24,7 @@ void Player::Move(Vec2<int> velocity)
 	{
 		posY = 0;
 	}
-	else if (posY >= SCREEN_HEIGHT)
+	else if (posY >= SCREEN_HEIGHT - sizeY)
 	{
 		posY = SCREEN_HEIGHT - sizeY - 1;
 	}
@@ -33,11 +33,11 @@ void Player::Move(Vec2<int> velocity)
 Vec2<int> Player::GetInput()
 {
 	Vec2<int> velocity;
-	if (GetKeyState(0x51)!= 0)
+	if ((GetKeyState(0x51)) < 0)
 	{
 		velocity.x = -1;
 	}
-	else if (GetKeyState(0x44)!= 0)
+	else if ((GetKeyState(0x44)) < 0)
 	{
 		velocity.x = 1;
 	}
@@ -46,11 +46,11 @@ Vec2<int> Player::GetInput()
 		velocity.x = 0;
 	}
 
-	if (GetKeyState(0x5A))
+	if (GetKeyState(0x5A) < 0)
 	{
 		velocity.y = -1;
 	}
-	else if (GetKeyState(0x53))
+	else if (GetKeyState(0x53) < 0)
 	{
 		velocity.y = 1;
 	}
