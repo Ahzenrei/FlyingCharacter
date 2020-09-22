@@ -1,6 +1,5 @@
 #include "GameManager.h"
 #include "Windows.h"
-#include <iostream>
 
 GameManager::GameManager()
 {
@@ -21,10 +20,46 @@ void GameManager::init()
         dwBufferCoord, &rcRegion);
 }
 
-void GameManager::WriteToConsole()
+void GameManager::Input()
 {
-    WriteConsoleOutput(hOutput, (CHAR_INFO*)buffer, dwBufferSize,
-        dwBufferCoord, &rcRegion);
+
+    //Shooting
+    if ((GetKeyState(VK_SPACE)) < 0)
+    {
+        player.Shoot();
+    }
+
+    //Movement
+    Vec2<int> velocity;
+
+    if ((GetKeyState(0x51)) < 0)
+    {
+        player.facingLeft = true;
+        velocity.x = -1;
+    }
+    else if ((GetKeyState(0x44)) < 0)
+    {
+        player.facingLeft = false;
+        velocity.x = 1;
+    }
+    else
+    {
+        velocity.x = 0;
+    }
+
+    if (GetKeyState(0x5A) < 0)
+    {
+        velocity.y = -1;
+    }
+    else if (GetKeyState(0x53) < 0)
+    {
+        velocity.y = 1;
+    }
+    else
+    {
+        velocity.y = 0;
+    }
+    player.velocity = velocity;
 }
 
 void GameManager::Flush()
@@ -36,6 +71,51 @@ void GameManager::Flush()
             buffer[j][i].Char.AsciiChar = ' ';
         }
     }
+}
+
+void GameManager::WriteFrame() // Warning buffer is [Y][X]
+{
+
+    //Projectiles
+    for (Projectile &projectile : player.projectiles)
+    {
+        if (projectile.isValid())
+        {
+            buffer[projectile.getY()][projectile.getX()].Char.AsciiChar = player.projectileFrame;
+            buffer[projectile.getY()][projectile.getX()].Attributes = player.projectileColor;
+        }
+    }
+
+    //Player
+
+    if (player.facingLeft)
+    {
+        for (int i = 0; i < player.sizeX; i++)
+        {
+            for (int j = 0; j < player.sizeY; j++)
+            {
+                buffer[player.posY + j][player.posX + i].Char.AsciiChar = player.idleLeft[player.frame][i + player.sizeX * j];
+                buffer[player.posY + j][player.posX + i].Attributes = player.color;
+            }
+        }
+    }
+    else
+    {
+        for (int i = 0; i < player.sizeX; i++)
+        {
+            for (int j = 0; j < player.sizeY; j++)
+            {
+                buffer[player.posY + j][player.posX + i].Char.AsciiChar = player.idleRight[player.frame][i + player.sizeX * j];
+                buffer[player.posY + j][player.posX + i].Attributes = player.color;
+            }
+        }
+    }
+}
+
+void GameManager::Draw()
+{
+    WriteConsoleOutput(hOutput, (CHAR_INFO*)buffer, dwBufferSize,
+        dwBufferCoord, &rcRegion);
 }
 
 LONG_PTR GameManager::setConsoleWindowStyle(INT n_index)

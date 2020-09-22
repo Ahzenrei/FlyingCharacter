@@ -2,7 +2,6 @@
 #include "Player.h"
 #include "NYTimer.h"
 #include <memory>
-#include <sstream>
 #include "World.h"
 
 
@@ -11,14 +10,17 @@ class GameManager
 public:
 	GameManager();
 	void init();
-	void WriteToConsole();
+	void Input();
 	void Flush();
+	void WriteFrame();
+	void Draw();
+
 private:
 	LONG_PTR setConsoleWindowStyle(INT n_index);
 	
 public:
 	NYTimer clock;
-	CHAR_INFO buffer[SCREEN_HEIGHT][SCREEN_WIDTH];
+	Player player;
 
 private:
 	COORD dwBufferSize;
@@ -26,6 +28,8 @@ private:
 	SMALL_RECT rcRegion;
 	LONG_PTR new_style;
 	HANDLE hOutput;
+
+	CHAR_INFO buffer[SCREEN_HEIGHT][SCREEN_WIDTH];
 
 };
 

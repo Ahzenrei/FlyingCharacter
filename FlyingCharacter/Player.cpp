@@ -1,6 +1,12 @@
 #include "Player.h"
 #include "Windows.h"
-#include "World.h"
+
+
+Player::Player()
+{
+	posX = SCREEN_WIDTH / 2;
+	posY = SCREEN_HEIGHT / 2;
+}
 
 Player::Player(int x, int y)
 	:
@@ -8,7 +14,7 @@ Player::Player(int x, int y)
 	posY(y)
 {}
 
-void Player::Move(Vec2<int> velocity)
+void Player::Move()
 {
 	posX += velocity.x;
 	if (posX < 0)
@@ -30,47 +36,61 @@ void Player::Move(Vec2<int> velocity)
 	}
 }
 
-Vec2<int> Player::GetInput()
+void Player::Shoot()
 {
-	Vec2<int> velocity;
-	if ((GetKeyState(0x51)) < 0)
+	if (shooting != -1)
 	{
-		facingLeft = true;
-		velocity.x = -1;
-	}
-	else if ((GetKeyState(0x44)) < 0)
-	{
-		facingLeft = false;
-		velocity.x = 1;
-	}
-	else
-	{
-		velocity.x = 0;
+		return;
 	}
 
-	if (GetKeyState(0x5A) < 0)
-	{
-		velocity.y = -1;
-	}
-	else if (GetKeyState(0x53) < 0)
-	{
-		velocity.y = 1;
-	}
-	else
-	{
-		velocity.y = 0;
-	}
-	return velocity;
+	shooting++;
 
+	for (int i = 0; i < MAX_PROJECTILES; i++)
+	{
+		if (!projectiles[i].isValid())
+		{
+			projectiles[i].setValid(true);
+
+			if (velocity.x == 0 && velocity.y == 0) //If the player don't move he shoots in front of him
+			{
+				if (facingLeft)
+				{
+					projectiles[i].Spawn(posX, posY, -1, 0);
+				}
+				else
+				{
+					projectiles[i].Spawn(posX, posY, 1, 0);
+				}
+			}
+			else //if he moves, he shoots in the direction he's going to
+			{
+				projectiles[i].Spawn(posX, posY, velocity.x, velocity.y);
+			}
+	
+			break;
+		}
+	}
 }
 
 void Player::ChangeFrame()
 {
+	//Handle Shooting
+	if (shooting != -1)
+	{
+		shooting++;
+	}
+	if (shooting >= shootingRecovery)
+	{
+		shooting = -1;
+	}
+
+	//Handle changing frame
 	currentFrame++;
 	if (currentFrame >= frameToChange)
 	{
 		currentFrame = 0;
 		frame = !frame;
 	}
+
 }
 
