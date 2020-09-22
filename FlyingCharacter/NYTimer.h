@@ -23,7 +23,7 @@ public:
 		QueryPerformanceCounter(&lastUpdateTime);
 	}
 
-	void reset()
+	void Reset()
 	{
 		LARGE_INTEGER timeNow;
 		QueryPerformanceCounter(&timeNow);

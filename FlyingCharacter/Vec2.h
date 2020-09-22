@@ -8,10 +8,12 @@ public:
 		x = 0;
 		y = 0;
 	}
+
 	Vec2(T x, T y)
 		:
 		x(x),
 		y(y)
-	{};
+	{}
+
 	T x, y;
 };

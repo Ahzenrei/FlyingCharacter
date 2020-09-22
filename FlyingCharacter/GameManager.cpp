@@ -7,7 +7,7 @@ GameManager::GameManager()
     dwBufferSize = { SCREEN_WIDTH,SCREEN_HEIGHT };
     dwBufferCoord = { 0, 0 };
     rcRegion = { 0, 0, SCREEN_WIDTH - 1, SCREEN_HEIGHT - 1 };
-    new_style = (WS_OVERLAPPED | WS_CAPTION | WS_SYSMENU | WS_MINIMIZEBOX | WS_MAXIMIZEBOX);
+    new_style = (WS_OVERLAPPED | WS_CAPTION | WS_SYSMENU | WS_MINIMIZEBOX );
     hOutput = (HANDLE)GetStdHandle(STD_OUTPUT_HANDLE);
 }
 

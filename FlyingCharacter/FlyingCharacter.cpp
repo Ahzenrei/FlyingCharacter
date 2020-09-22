@@ -35,21 +35,36 @@ int main()
         {
             player.Move(velocity);
             //Reset timer
-            gm.clock.reset();
+            gm.clock.Reset();
 
             //Flush buffer
             gm.Flush();
             //write buffer
-            for (int i = 0; i < player.sizeX; i++)
+            if (player.facingLeft)
             {
-                for (int j = 0; j < player.sizeY; j++)
+                for (int i = 0; i < player.sizeX; i++)
                 {
-                    gm.buffer[player.posY + j][player.posX + i].Char.AsciiChar = player.idleLeft[player.frame][i + player.sizeX * j];
-                    gm.buffer[player.posY + j][player.posX + i].Attributes = player.color;
+                    for (int j = 0; j < player.sizeY; j++)
+                    {
+                        gm.buffer[player.posY + j][player.posX + i].Char.AsciiChar = player.idleLeft[player.frame][i + player.sizeX * j];
+                        gm.buffer[player.posY + j][player.posX + i].Attributes = player.color;
+                    }
                 }
             }
+            else
+            {
+                for (int i = 0; i < player.sizeX; i++)
+                {
+                    for (int j = 0; j < player.sizeY; j++)
+                    {
+                        gm.buffer[player.posY + j][player.posX + i].Char.AsciiChar = player.idleRight[player.frame][i + player.sizeX * j];
+                        gm.buffer[player.posY + j][player.posX + i].Attributes = player.color;
+                    }
+                }
+            }
+
             
-            player.frame = !player.frame;
+            player.ChangeFrame();
 
             //write screen
             gm.WriteToConsole();

@@ -15,9 +15,9 @@ void Player::Move(Vec2<int> velocity)
 	{
 		posX = 0;
 	}
-	else if (posX >= SCREEN_WIDTH)
+	else if (posX >= SCREEN_WIDTH - sizeX)
 	{
-		posX = SCREEN_WIDTH-1;
+		posX = SCREEN_WIDTH-1-sizeX;
 	}
 	posY += velocity.y;
 	if (posY < 0)
@@ -35,10 +35,12 @@ Vec2<int> Player::GetInput()
 	Vec2<int> velocity;
 	if ((GetKeyState(0x51)) < 0)
 	{
+		facingLeft = true;
 		velocity.x = -1;
 	}
 	else if ((GetKeyState(0x44)) < 0)
 	{
+		facingLeft = false;
 		velocity.x = 1;
 	}
 	else
@@ -60,5 +62,15 @@ Vec2<int> Player::GetInput()
 	}
 	return velocity;
 
+}
+
+void Player::ChangeFrame()
+{
+	currentFrame++;
+	if (currentFrame >= frameToChange)
+	{
+		currentFrame = 0;
+		frame = !frame;
+	}
 }
 

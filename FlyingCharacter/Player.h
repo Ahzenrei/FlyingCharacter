@@ -8,6 +8,7 @@ public:
 	Player(int x, int y);
 	void Move(Vec2<int>);
 	Vec2<int> GetInput();
+	void ChangeFrame();
 
 public:
 	const char idleLeft[2][30] =
@@ -17,8 +18,8 @@ public:
 			' ' , '(' , '[' , '\\',
 			'/' , '(' , '[' , '|',
 			' ' , '(' , 'V' , 'V',
-			' ' , '|' , ' ' , '*',
-			' ' , 'J' , '*' , ' '
+			' ' , '|' , ' ' , '/',
+			' ' , 'J' , '/' , ' '
 	
 		},
 		{
@@ -26,9 +27,31 @@ public:
 			' ', '(', '[', '\\',
 			'/', '(', '[', '|',
 			' ', '(', 'V', 'V',
-			' ', '|', '*', ' ',
-			' ', 'J', ' ', '*'
+			' ', '/', ' ', '|',
+			'/', ' ', ' ', 'J'
 	
+		}
+	};
+
+	const char idleRight[2][30] =
+	{
+		{
+			' ' , ' ' , '(' , ')' ,
+			'/' , ']' , ')' , ' ',
+			'|' , ']' , ')' , '\\',
+			'V' , 'V' , ')' , ' ',
+			'\\' , ' ' , '|' , ' ',
+			' ' , '\\' , 'L' , ' '
+
+		},
+		{
+			' ' , ' ' , '(' , ')' ,
+			'/' , ']' , ')' , ' ',
+			'|' , ']' , ')' , '\\',
+			'V' , 'V' , ')' , ' ',
+			'|' , ' ' , '\\' , ' ',
+			'L' , ' ' , ' ' , '\\'
+
 		}
 	};
 
@@ -36,7 +59,12 @@ public:
 	const int sizeX = 4;
 	const int sizeY = 6;
 	bool frame = false;
+	bool facingLeft = true;
 	int posX;
 	int posY;
+
+private:
+	int currentFrame = 0;
+	const int frameToChange = 12;
 };
 
