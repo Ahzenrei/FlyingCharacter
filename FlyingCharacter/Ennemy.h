@@ -72,15 +72,19 @@ public:
 			case 0: //Left side
 				posX = 0;
 				posY = uniform_dist_height(e1);
+				break;
 			case 1: //Top side
 				posX = uniform_dist_width(e1);
 				posY = 0;
+				break;
 			case 2: // Right side
 				posX = SCREEN_WIDTH - 1;
 				posY = uniform_dist_height(e1);
+				break;
 			case 3: //Bottom side
 				posX = uniform_dist_width(e1);
 				posY = SCREEN_HEIGHT - 1;
+				break;
 		}
 
 		isValid = true;

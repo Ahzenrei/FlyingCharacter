@@ -24,7 +24,7 @@ void GameManager::Input() noexcept
 
     //Shooting
     if ((GetKeyState(VK_SPACE)) < 0)
-    {
+    { 
         player.Shoot();
     }
 
@@ -197,6 +197,7 @@ void GameManager::WriteFrame() noexcept // Warning buffer is [Y][X]
 
 void GameManager::Draw()
 {
+    
     WriteConsoleOutput(hOutput, (CHAR_INFO*)buffer, dwBufferSize,
         dwBufferCoord, &rcRegion);
 }
