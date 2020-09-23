@@ -55,16 +55,16 @@ void Player::Shoot()
 			{
 				if (facingLeft)
 				{
-					projectiles[i].Spawn(posX, posY, -1, 0);
+					projectiles[i].Spawn(posX, posY + 1, -1, 0);
 				}
 				else
 				{
-					projectiles[i].Spawn(posX, posY, 1, 0);
+					projectiles[i].Spawn(posX, posY + 1, 1, 0);
 				}
 			}
 			else //if he moves, he shoots in the direction he's going to
 			{
-				projectiles[i].Spawn(posX, posY, velocity.x, velocity.y);
+				projectiles[i].Spawn(posX, posY + 1, velocity.x, velocity.y);
 			}
 	
 			break;

@@ -59,7 +59,7 @@ public:
 
 	const int projectileColor = 0x0B;
 	const char projectileFrame = '*';
-	const int color = 0x0E;
+	int color = 0x0E;
 	const int sizeX = 4;
 	const int sizeY = 6;
 	bool frame = false;
@@ -74,6 +74,6 @@ private:
 	int currentFrame = 0;
 	const int frameToChange = 12;
 	int shooting = -1;
-	const int shootingRecovery = 2;
+	const int shootingRecovery = 8;
 };
 

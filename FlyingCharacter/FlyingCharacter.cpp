@@ -1,6 +1,5 @@
 // FlyingCharacter.cpp : Ce fichier contient la fonction 'main'. L'exécution du programme commence et se termine à cet endroit.
 //
-
 #include "GameManager.h"
 
 int main()
@@ -15,17 +14,12 @@ int main()
 
         if (gm.clock.getElapsedSeconds(false) > FRAMERATE)
         {
-            //Physics
-            gm.player.Move();
-            for (Projectile &projectile : gm.player.projectiles)
-            {
-                if (projectile.isValid())
-                {
-                    projectile.Move();
-                }
-            }
+            gm.SpawnEnnemy();
 
-            gm.player.ChangeFrame();
+            //Physics
+            gm.Move();  
+
+            gm.ChangeFrame();
 
             //Reset timer
             gm.clock.Reset();

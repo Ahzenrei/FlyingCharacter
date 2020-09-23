@@ -8,6 +8,8 @@ GameManager::GameManager()
     rcRegion = { 0, 0, SCREEN_WIDTH - 1, SCREEN_HEIGHT - 1 };
     new_style = (WS_OVERLAPPED | WS_CAPTION | WS_SYSMENU | WS_MINIMIZEBOX );
     hOutput = (HANDLE)GetStdHandle(STD_OUTPUT_HANDLE);
+    ReadConsoleOutput(hOutput, (CHAR_INFO*)buffer, dwBufferSize,
+        dwBufferCoord, &rcRegion);
 }
 
 void GameManager::init()
@@ -15,12 +17,9 @@ void GameManager::init()
 	setConsoleWindowStyle(GWL_STYLE);
 
 	clock.start();
-
-    ReadConsoleOutput(hOutput, (CHAR_INFO*)buffer, dwBufferSize,
-        dwBufferCoord, &rcRegion);
 }
 
-void GameManager::Input()
+void GameManager::Input() noexcept
 {
 
     //Shooting
@@ -62,7 +61,53 @@ void GameManager::Input()
     player.velocity = velocity;
 }
 
-void GameManager::Flush()
+void GameManager::ChangeFrame() noexcept
+{
+    player.ChangeFrame();
+    for (Ennemy &ennemy : ennemies)
+    {
+        if (ennemy.IsValid())
+        {
+            ennemy.ChangeFrame();
+        }
+    }
+}
+
+void GameManager::SpawnEnnemy() noexcept
+{
+
+    for (Ennemy& ennemy : ennemies)
+    {
+        if (!ennemy.IsValid())
+        {
+            ennemy.Spawn(nextEnnemy);
+            nextEnnemy = (nextEnnemy + 1) % 4;
+            return;
+        }
+    }
+}
+
+void GameManager::Move() noexcept
+{
+    player.Move();
+
+    for (Projectile& projectile : player.projectiles)
+    {
+        if (projectile.isValid())
+        {
+            projectile.Move();
+        }
+    }
+    for (Ennemy& ennemy : ennemies)
+    {
+        if (ennemy.IsValid())
+        {
+            ennemy.MoveTo(player.posX, player.posY);
+        }
+    }
+}
+
+void GameManager::Flush() noexcept
 {
     for (int i = 0; i < SCREEN_WIDTH; i++)
     {
@@ -73,7 +118,7 @@ void GameManager::Flush()
     }
 }
 
-void GameManager::WriteFrame() // Warning buffer is [Y][X]
+void GameManager::WriteFrame() noexcept // Warning buffer is [Y][X]
 {
 
     //Projectiles
@@ -86,6 +131,40 @@ void GameManager::WriteFrame() // Warning buffer is [Y][X]
         }
     }
 
+    //Ennemies
+    for (Ennemy& ennemy : ennemies)
+    {
+        if (ennemy.IsValid())
+        {
+            for (int i = 0; i < ennemy.sizeX; i++)
+            {
+                int posX = ennemy.posX + i;
+                if (posX > SCREEN_WIDTH - 1 || posX < 0)
+                {
+                    continue;
+                }
+
+                for (int j = 0; j < ennemy.sizeY; j++)
+                {
+
+                    int posY = ennemy.posY + j;
+
+                    if (posY > SCREEN_HEIGHT - 1 || posY < 0)
+                    {
+                        continue;
+                    }
+
+                    if (buffer[posY ][posX].Char.AsciiChar == '*') //Si on redessine par dessus un projectile alors l'ennemi est touché
+                    {
+                        ennemy.Kill();
+                    }
+                    buffer[posY][posX].Char.AsciiChar = ennemy.anim[ennemy.frame][i + ennemy.sizeX * j];
+                    buffer[posY][posX].Attributes = ennemy.color;
+                }
+            }
+        }
+    }
+
     //Player
 
     if (player.facingLeft)
@@ -94,6 +173,10 @@ void GameManager::WriteFrame() // Warning buffer is [Y][X]
         {
             for (int j = 0; j < player.sizeY; j++)
             {
+                if (buffer[player.posY + j][player.posX + i].Char.AsciiChar != ' ' && buffer[player.posY + j][player.posX + i].Char.AsciiChar != '*')
+                {
+                    GameOver();
+                }
                 buffer[player.posY + j][player.posX + i].Char.AsciiChar = player.idleLeft[player.frame][i + player.sizeX * j];
                 buffer[player.posY + j][player.posX + i].Attributes = player.color;
             }
@@ -116,6 +199,12 @@ void GameManager::Draw()
 {
     WriteConsoleOutput(hOutput, (CHAR_INFO*)buffer, dwBufferSize,
         dwBufferCoord, &rcRegion);
+}
+
+void GameManager::GameOver() noexcept
+{
+    player.color = 0x08;
+    //ded
 }
 
 LONG_PTR GameManager::setConsoleWindowStyle(INT n_index)

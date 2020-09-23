@@ -7,34 +7,34 @@ class Projectile
 {
 public:
 	Projectile() = default;
-	Projectile(int _posX, int _posY)
+	Projectile(const int _posX, const int _posY)
 		:
 		posX(_posX),
 		posY(_posY),
 		valid(true)
 	{}
 
-	bool isValid()
+	bool isValid() const noexcept
 	{
 		return valid;
 	}
 
-	void setValid(bool isValid)
+	void setValid(const bool isValid)
 	{
 		valid = isValid;
 	}
 
-	int getX()
+	int getX() const noexcept
 	{
 		return posX;
 	}
 
-	int getY()
+	int getY() const noexcept
 	{
 		return posY;
 	}
 	
-	void Spawn(int x, int y, int vx, int vy)
+	void Spawn(const int x, const int y, const int vx, const int vy) noexcept
 	{
 		posX = x;
 		posY = y;
@@ -42,7 +42,7 @@ public:
 		velocity.y = vy;
 	}
 
-	void Move()
+	void Move() noexcept
 	{
 		posX += velocity.x * speed;
 		posY += velocity.y * speed;
