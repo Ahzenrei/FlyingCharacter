@@ -7,7 +7,7 @@
 class Ennemy
 {
 public:
-	Ennemy(int x = 0, int y = 0) : anim(FileReader::getSpritesFromFile("SpriteFoe.txt", nbFrame, sizeX, sizeY))
+	Ennemy(int x = 0, int y = 0)
 	{
 		posX = x;
 		posY = y;
@@ -97,7 +97,7 @@ public:
 
 public:
 
-	const char** anim;
+	const char** anim = FileReader::getSpritesFromFile("SpriteFoe.txt", nbFrame, sizeX, sizeY);
 	/*const char anim[2][15] =
 	{
 		{
