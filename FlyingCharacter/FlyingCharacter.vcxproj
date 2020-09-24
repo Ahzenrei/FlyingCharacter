@@ -160,6 +160,9 @@
   </ItemGroup>
   <ItemGroup>
     <Text Include="Sprite.txt" />
+    <Text Include="SpriteCharacterLeft.txt" />
+    <Text Include="SpriteCharacterRight.txt" />
+    <Text Include="SpriteFoe.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

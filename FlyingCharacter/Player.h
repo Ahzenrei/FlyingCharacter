@@ -2,6 +2,7 @@
 #include "Vec2.h"
 #include "Projectile.h"
 #include "World.h"
+#include "FileReader.h"
 
 class Player
 {
@@ -12,7 +13,12 @@ public:
 	void Shoot();
 	void ChangeFrame();
 
-public:
+public:	
+
+	const char** idleLeft = FileReader::getSpritesFromFile("SpriteCharacterLeft.txt", nbFrame, sizeX, sizeY);
+	const char** idleRight = FileReader::getSpritesFromFile("SpriteCharacterRight.txt", nbFrame, sizeX, sizeY);
+
+	/*
 	const char idleLeft[2][30] =
 	{
 		{
@@ -55,13 +61,14 @@ public:
 			'L' , ' ' , ' ' , '\\'
 
 		}
-	};
+	};*/
 
 	const int projectileColor = 0x0B;
 	const char projectileFrame = '*';
 	int color = 0x0E;
-	const int sizeX = 4;
-	const int sizeY = 6;
+	int sizeX = 4;
+	int sizeY = 6;
+	int nbFrame = 2;
 	bool frame = false;
 	bool facingLeft = true;
 

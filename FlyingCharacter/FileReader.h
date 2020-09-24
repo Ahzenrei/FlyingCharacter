@@ -4,8 +4,8 @@
 class FileReader
 {
 public:
-	static char** getSpritesFromFile(std::string fileName, int& nbFrames, int& height, int& width);
-	static void freeSprites(char**& sprites, int nbSprites);
+	static const char** getSpritesFromFile(std::string fileName, int& nbFrames, int& height, int& width);
+	static void freeSprites(const char**& sprites, int nbSprites);
 
 private:
 };

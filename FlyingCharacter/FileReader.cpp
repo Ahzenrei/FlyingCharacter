@@ -1,7 +1,7 @@
 #include "FileReader.h"
 //#include <fstream>
 
-char** FileReader::getSpritesFromFile(std::string fileName, int& nbFrames, int& height, int& width)
+const char** FileReader::getSpritesFromFile(std::string fileName, int& nbFrames, int& height, int& width)
 {
 	std::ifstream fileStream = std::ifstream(fileName);
 
@@ -26,7 +26,8 @@ char** FileReader::getSpritesFromFile(std::string fileName, int& nbFrames, int& 
 
 		if (charSprite == nullptr)
 		{
-			freeSprites(sprites, i);
+			const char** constSprites = (const char**) sprites;
+			freeSprites(constSprites, i);
 			return nullptr;
 		}
 
@@ -40,10 +41,16 @@ char** FileReader::getSpritesFromFile(std::string fileName, int& nbFrames, int& 
 		sprites[i] = charSprite;
 	}
 
-	return sprites;
+	return (const char**) sprites;
 }
 
-void FileReader::freeSprites(char**& sprites, int nbSprites)
+/*
+const char c = 'x';
+char *p1;
+const char **p2 = &p1;
+*/
+
+void FileReader::freeSprites(const char**& sprites, int nbSprites)
 {
 	if (sprites != nullptr)
 	{
@@ -51,7 +58,7 @@ void FileReader::freeSprites(char**& sprites, int nbSprites)
 		{
 			if (sprites[i] != nullptr)
 			{
-				free(sprites[i]);
+				free((void*)sprites[i]);
 			}
 		}
 		free(sprites);

@@ -2,16 +2,16 @@
 #include "Vec2.h"
 #include "World.h"
 #include <random>
+#include "FileReader.h"
 
 class Ennemy
 {
 public:
-	Ennemy() = default;
-	Ennemy(int x, int y)
+	Ennemy(int x = 0, int y = 0) : anim(FileReader::getSpritesFromFile("SpriteFoe.txt", nbFrame, sizeX, sizeY))
 	{
 		posX = x;
 		posY = y;
-		isValid = true;
+		isValid = false;
 	}
 
 	void MoveTo(const int targetX, const int targetY) noexcept
@@ -97,7 +97,8 @@ public:
 
 public:
 
-	const char anim[2][15] =
+	const char** anim;
+	/*const char anim[2][15] =
 	{
 		{
 			' ' , '_'  , '_' , ' ' , ' ',
@@ -111,11 +112,12 @@ public:
 			' ' , '\\' , '_' , '/' , ' '
 
 		}
-	};
+	};*/
 
 	const int color = 0x05;
-	const int sizeX = 5;
-	const int sizeY = 3;
+	int sizeX = 5;
+	int sizeY = 3;
+	int nbFrame = 2;
 	bool frame = false;
 	bool facingLeft = true;
 

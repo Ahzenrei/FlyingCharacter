@@ -56,9 +56,21 @@
     <ClInclude Include="Ennemy.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
+    <ClInclude Include="FileReader.h">
+      <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Text Include="Sprite.txt">
+      <Filter>Fichiers de ressources</Filter>
+    </Text>
+    <Text Include="SpriteCharacterLeft.txt">
+      <Filter>Fichiers de ressources</Filter>
+    </Text>
+    <Text Include="SpriteCharacterRight.txt">
+      <Filter>Fichiers de ressources</Filter>
+    </Text>
+    <Text Include="SpriteFoe.txt">
       <Filter>Fichiers de ressources</Filter>
     </Text>
   </ItemGroup>
