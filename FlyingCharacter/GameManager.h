@@ -12,22 +12,28 @@ public:
 	GameManager();
 	void init();
 	void Input() noexcept;
-	void ChangeFrame() noexcept;
-	void SpawnEnnemy() noexcept;
-	void Move() noexcept;
+	void Update() noexcept;
 	void Flush()noexcept;
 	void WriteFrame() noexcept;
 	void Draw();
 
 private:
 	LONG_PTR setConsoleWindowStyle(INT n_index);
+	void ChangeFrame() noexcept;
+	void StartGame() noexcept;
+	void SpawnEnnemy() noexcept;
+	void Move() noexcept;
 	void GameOver() noexcept;
+	void Reset() noexcept;
 	
 public:
+	enum class GAME_STATE { START, PLAYING, GAMEOVER };
+	GAME_STATE gameState = GAME_STATE::START;
 	NYTimer clock;
 	Player player;
 
 private:
+	int score = 0;
 	COORD dwBufferSize;
 	COORD dwBufferCoord;
 	SMALL_RECT rcRegion;

@@ -1,5 +1,6 @@
 #include "GameManager.h"
 #include "Windows.h"
+#include <string>
 
 GameManager::GameManager()
 {
@@ -21,6 +22,15 @@ void GameManager::init()
 
 void GameManager::Input() noexcept
 {
+    //Starting the game
+    if (gameState == GAME_STATE::START || gameState == GAME_STATE::GAMEOVER)
+    {
+        if ((GetKeyState(VK_RETURN)) < 0)
+        {
+            StartGame();
+        }
+        return;
+    }
 
     //Shooting
     if ((GetKeyState(VK_SPACE)) < 0)
@@ -61,16 +71,44 @@ void GameManager::Input() noexcept
     player.velocity = velocity;
 }
 
+void GameManager::Update() noexcept
+{
+    if (gameState == GAME_STATE::PLAYING) //Spawn an ennemy every frame
+    {
+        SpawnEnnemy();
+        Move();
+    }
+    ChangeFrame();
+}
+
 void GameManager::ChangeFrame() noexcept
 {
-    player.ChangeFrame();
-    for (Ennemy &ennemy : ennemies)
+    if (gameState == GAME_STATE::PLAYING)
     {
-        if (ennemy.IsValid())
+        player.ChangeFrame();
+        for (Ennemy& ennemy : ennemies)
         {
-            ennemy.ChangeFrame();
+            if (ennemy.IsValid())
+            {
+                ennemy.ChangeFrame();
+            }
         }
     }
+    if (gameState == GAME_STATE::START)
+    {
+        //change frame for start screen if there is an animation
+    }
+    if (gameState == GAME_STATE::GAMEOVER)
+    {
+        //change frame for gameover screen if there is an animation
+    }
+
+}
+
+void GameManager::StartGame() noexcept
+{
+    gameState = GAME_STATE::PLAYING;
+    Reset();
 }
 
 void GameManager::SpawnEnnemy() noexcept
@@ -121,6 +159,18 @@ void GameManager::Flush() noexcept
 void GameManager::WriteFrame() noexcept // Warning buffer is [Y][X]
 {
 
+    if (gameState == GAME_STATE::START)
+    {
+        //draw start screen
+        return;
+    }
+
+    if (gameState == GAME_STATE::GAMEOVER)
+    {
+        //draw game over screen
+        return;
+    }
+
     //Projectiles
     for (Projectile &projectile : player.projectiles)
     {
@@ -139,7 +189,7 @@ void GameManager::WriteFrame() noexcept // Warning buffer is [Y][X]
             for (int i = 0; i < ennemy.sizeX; i++)
             {
                 int posX = ennemy.posX + i;
-                if (posX > SCREEN_WIDTH - 1 || posX < 0)
+                if (posX > SCREEN_WIDTH - 1 || posX < 0) //discard every characters that is out of the screen
                 {
                     continue;
                 }
@@ -154,8 +204,9 @@ void GameManager::WriteFrame() noexcept // Warning buffer is [Y][X]
                         continue;
                     }
 
-                    if (buffer[posY ][posX].Char.AsciiChar == '*') //Si on redessine par dessus un projectile alors l'ennemi est touché
+                    if (buffer[posY ][posX].Char.AsciiChar == '*') //if we redraw onto a projectile, the ennemy dies
                     {
+                        score++;
                         ennemy.Kill();
                     }
                     buffer[posY][posX].Char.AsciiChar = ennemy.anim[ennemy.frame][i + ennemy.sizeX * j];
@@ -167,45 +218,74 @@ void GameManager::WriteFrame() noexcept // Warning buffer is [Y][X]
 
     //Player
 
-    if (player.facingLeft)
+    if (player.facingLeft) //draws the player facing left
     {
         for (int i = 0; i < player.sizeX; i++)
         {
             for (int j = 0; j < player.sizeY; j++)
             {
-                if (buffer[player.posY + j][player.posX + i].Char.AsciiChar != ' ' && buffer[player.posY + j][player.posX + i].Char.AsciiChar != '*')
-                {
+                if (buffer[player.posY + j][player.posX + i].Char.AsciiChar != ' ' && buffer[player.posY + j][player.posX + i].Char.AsciiChar != '*') 
+                { //if we redraw the player onto something that is not a space or a projectile, then it's an ennemy so we die
                     GameOver();
+                    return;
                 }
                 buffer[player.posY + j][player.posX + i].Char.AsciiChar = player.idleLeft[player.frame][i + player.sizeX * j];
                 buffer[player.posY + j][player.posX + i].Attributes = player.color;
             }
         }
     }
-    else
+    else //draws the player facing right
     {
         for (int i = 0; i < player.sizeX; i++)
         {
             for (int j = 0; j < player.sizeY; j++)
             {
+                if (buffer[player.posY + j][player.posX + i].Char.AsciiChar != ' ' && buffer[player.posY + j][player.posX + i].Char.AsciiChar != '*')
+                { //if we write the player onto something that is not a space or a projectile, then it's an ennemy so we die
+                    GameOver();
+                    return;
+                }
                 buffer[player.posY + j][player.posX + i].Char.AsciiChar = player.idleRight[player.frame][i + player.sizeX * j];
                 buffer[player.posY + j][player.posX + i].Attributes = player.color;
             }
         }
     }
+
+    //Draw score
+    std::string s = "Score: ";
+    s += std::to_string(score);
+    int size = s.size();
+    for (int i = 0; i < size; i++)
+    {
+        buffer[1][SCREEN_WIDTH + i - size-2].Char.AsciiChar = s[i];
+        buffer[1][SCREEN_WIDTH + i - size-2].Attributes = 0x02;
+    }
 }
 
 void GameManager::Draw()
-{
-    
+{ 
     WriteConsoleOutput(hOutput, (CHAR_INFO*)buffer, dwBufferSize,
         dwBufferCoord, &rcRegion);
 }
 
 void GameManager::GameOver() noexcept
 {
-    player.color = 0x08;
-    //ded
+    gameState = GAME_STATE::GAMEOVER;
+}
+
+void GameManager::Reset() noexcept //Replace the player in the center of the screen, reset the score and kill every ennemies/projectiles
+{
+    player.posX = SCREEN_WIDTH / 2;
+    player.posY = SCREEN_HEIGHT / 2;
+    score = 0;
+    for (Ennemy &ennemy : ennemies)
+    {
+        ennemy.Kill();
+    }
+    for (Projectile &projectile : player.projectiles)
+    {
+        projectile.setValid(false);
+    }
 }
 
 LONG_PTR GameManager::setConsoleWindowStyle(INT n_index)

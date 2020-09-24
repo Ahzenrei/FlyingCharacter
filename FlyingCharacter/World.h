@@ -2,5 +2,5 @@
 #define SCREEN_WIDTH 121
 #define SCREEN_HEIGHT 31
 #define FRAMERATE 0.033
-#define MAX_ENEMIES 8
+#define MAX_ENEMIES 5
 #define MAX_PROJECTILES 20
