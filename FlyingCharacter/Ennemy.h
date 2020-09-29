@@ -69,12 +69,12 @@ public:
 		std::uniform_int_distribution<int> uniform_dist_height(0, SCREEN_HEIGHT);	
 		std::uniform_int_distribution<int> uniform_dist_frame(difficulty, 15);
 		int roll = uniform_dist_frame(e1);
-		if ( roll > 10)
+		if ( roll > 13)
 		{
 			frameToMove = 2;
 			color = 0x03;
 		}
-		else if (roll > 5 && roll < 10)
+		else if (roll > 8 && roll < 13)
 		{
 			frameToMove = 3;
 			color = 0x04;
