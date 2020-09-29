@@ -61,12 +61,30 @@ public:
 		return isValid;
 	}
 
-	void Spawn(char side) noexcept
+	void Spawn(char side, int difficulty) noexcept
 	{
 		std::random_device r;
 		std::default_random_engine e1(r());
 		std::uniform_int_distribution<int> uniform_dist_width(0, SCREEN_WIDTH);
 		std::uniform_int_distribution<int> uniform_dist_height(0, SCREEN_HEIGHT);	
+		std::uniform_int_distribution<int> uniform_dist_frame(difficulty, 15);
+		int roll = uniform_dist_frame(e1);
+		if ( roll > 10)
+		{
+			frameToMove = 2;
+			color = 0x03;
+		}
+		else if (roll > 5 && roll < 10)
+		{
+			frameToMove = 3;
+			color = 0x04;
+		}
+		else
+		{
+			frameToMove = 4;
+			color = 0x05;
+		}
+
 		switch (side)
 		{
 			case 0: //Left side
@@ -113,7 +131,7 @@ public:
 		}
 	};
 
-	const int color = 0x05;
+	int color = 0x05;
 	const int sizeX = 5;
 	const int sizeY = 3;
 	bool frame = false;
@@ -128,6 +146,6 @@ private:
 	int currentFrame = 0;
 	const int frameToChange = 12;
 	int moving = 0;
-	const int frameToMove = 2;
+	int frameToMove = 2;
 	bool isValid = false;
 };

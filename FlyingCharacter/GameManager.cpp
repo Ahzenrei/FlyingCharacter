@@ -118,12 +118,11 @@ void GameManager::StartGame() noexcept
 
 void GameManager::SpawnEnnemy() noexcept
 {
-
-	for (Ennemy& ennemy : ennemies)
+	for (int i = 0; i < nbEnnemies; i++)
 	{
-		if (!ennemy.IsValid())
+		if (!ennemies[i].IsValid())
 		{
-			ennemy.Spawn(nextEnnemy);
+			ennemies[i].Spawn(nextEnnemy, difficulty);
 			nextEnnemy = (nextEnnemy + 1) % 4;
 			return;
 		}
@@ -167,8 +166,8 @@ void GameManager::WriteFrame() noexcept // Warning buffer is [Y][X]
 	if (gameState == GAME_STATE::START)
 	{
 		//draw start screen
-		char text[28] = "Welcome to pewpewland !";
-		for (int i = 0; i < 28; i++)
+		char text[28] = "Welcome to pewpewland !"; 
+		for (int i = 0; i < 28; i++) //we could do sizeof(text) / sizeof(char) to avoid hardcoded value but I'm lazy
 		{
 			buffer[SCREEN_HEIGHT / 2 - 1][SCREEN_WIDTH / 2 - 14 + i].Char.AsciiChar = text[i];
 			buffer[SCREEN_HEIGHT / 2 - 1][SCREEN_WIDTH / 2 - 14 + i].Attributes = 0x02;
@@ -238,7 +237,7 @@ void GameManager::WriteFrame() noexcept // Warning buffer is [Y][X]
 
 					if (buffer[posY][posX].Char.AsciiChar == '*') //if we redraw onto a projectile, the ennemy dies
 					{
-						score++;
+						AddScore();
 						ennemy.Kill();
 					}
 					buffer[posY][posX].Char.AsciiChar = ennemy.anim[ennemy.frame][i + ennemy.sizeX * j];
@@ -310,6 +309,8 @@ void GameManager::Reset() noexcept //Replace the player in the center of the scr
 	player.posX = SCREEN_WIDTH / 2;
 	player.posY = SCREEN_HEIGHT / 2;
 	score = 0;
+	nbEnnemies = 3;
+	difficulty = 1;
 	for (Ennemy& ennemy : ennemies)
 	{
 		ennemy.Kill();
@@ -317,6 +318,16 @@ void GameManager::Reset() noexcept //Replace the player in the center of the scr
 	for (Projectile& projectile : player.projectiles)
 	{
 		projectile.setValid(false);
+	}
+}
+
+void GameManager::AddScore() noexcept
+{
+	score++;
+	if (score % (5 * (difficulty * difficulty)) == 0) //Increase difficulty every 5 * difficulty² points
+	{
+		difficulty++;
+		nbEnnemies = (nbEnnemies + 1) < MAX_ENEMIES ? nbEnnemies + 1 : MAX_ENEMIES;
 	}
 }
 

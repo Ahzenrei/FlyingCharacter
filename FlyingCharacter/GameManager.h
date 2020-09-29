@@ -25,6 +25,7 @@ private:
 	void Move() noexcept;
 	void GameOver() noexcept;
 	void Reset() noexcept;
+	void AddScore() noexcept;
 	
 public:
 	enum class GAME_STATE { START, PLAYING, GAMEOVER };
@@ -39,8 +40,10 @@ private:
 	SMALL_RECT rcRegion;
 	LONG_PTR new_style;
 	HANDLE hOutput;
+	int nbEnnemies = 3;
+	int difficulty = 1;
 	Ennemy ennemies[MAX_ENEMIES];
-	char nextEnnemy = 0;
+	char nextEnnemy = 0; //Define which side the ennemy will spawn
 	CHAR_INFO buffer[SCREEN_HEIGHT][SCREEN_WIDTH];
 
 };
