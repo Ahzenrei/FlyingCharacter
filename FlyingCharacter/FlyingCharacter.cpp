@@ -14,23 +14,19 @@ int main()
 
         if (gm.clock.getElapsedSeconds(false) > FRAMERATE)
         {
-            gm.SpawnEnnemy();
-
-            //Physics
-            gm.Move();  
-
-            gm.ChangeFrame();
-
             //Reset timer
             gm.clock.Reset();
 
             //Flush buffer
             gm.Flush();
 
-            //write buffer
+            //Update game
+            gm.Update();
+
+            //Write to buffer
             gm.WriteFrame();
-            
-            //write screen
+
+            //Draw screen
             gm.Draw();
         }
     }  
