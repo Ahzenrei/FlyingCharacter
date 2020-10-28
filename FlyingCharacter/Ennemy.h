@@ -12,6 +12,7 @@ public:
 		posX = x;
 		posY = y;
 		isValid = false;
+		anim = FileReader::getSpritesFromFile("SpriteFoe.txt", nbFrame, sizeY, sizeX);
 	}
 
 	void MoveTo(const int targetX, const int targetY) noexcept
@@ -52,7 +53,7 @@ public:
 		if (currentFrame >= frameToChange)
 		{
 			currentFrame = 0;
-			frame = !frame;
+			frame = (frame + 1)%nbFrame;
 		}
 	}
 
@@ -115,7 +116,7 @@ public:
 
 public:
 
-	const char** anim = FileReader::getSpritesFromFile("SpriteFoe.txt", nbFrame, sizeX, sizeY);
+	const char** anim; //= FileReader::getSpritesFromFile("SpriteFoe.txt", nbFrame, sizeX, sizeY);
 	/*const char anim[2][15] =
 	{
 		{
@@ -133,10 +134,10 @@ public:
 	};*/
 
 	int color = 0x05;
-	int sizeX = 5;
-	int sizeY = 3;
-	int nbFrame = 2;
-	bool frame = false;
+	int sizeX;
+	int sizeY;
+	int nbFrame;
+	int frame = 0;
 	bool facingLeft = true;
 
 	int posX = -1;
@@ -146,7 +147,7 @@ public:
 private:
 	int speed = 1;
 	int currentFrame = 0;
-	const int frameToChange = 12;
+	const int frameToChange = ANIM_FRAME_DURATION;
 	int moving = 0;
 	int frameToMove = 2;
 	bool isValid = false;

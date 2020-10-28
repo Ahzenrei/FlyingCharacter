@@ -15,8 +15,8 @@ public:
 
 public:	
 
-	const char** idleLeft = FileReader::getSpritesFromFile("SpriteCharacterLeft.txt", nbFrame, sizeX, sizeY);
-	const char** idleRight = FileReader::getSpritesFromFile("SpriteCharacterRight.txt", nbFrame, sizeX, sizeY);
+	const char** idleLeft;  // = FileReader::getSpritesFromFile("SpriteCharacterLeft.txt",  nbFrame, sizeX, sizeY);
+	const char** idleRight; // = FileReader::getSpritesFromFile("SpriteCharacterRight.txt", nbFrame, sizeX, sizeY);
 
 	/*
 	const char idleLeft[2][30] =
@@ -66,10 +66,10 @@ public:
 	const int projectileColor = 0x0B;
 	const char projectileFrame = '*';
 	int color = 0x0E;
-	int sizeX = 4;
-	int sizeY = 6;
-	int nbFrame = 2;
-	bool frame = false;
+	int sizeX;
+	int sizeY;
+	int nbFrame;
+	int frame = 0;
 	bool facingLeft = true;
 
 	int posX;

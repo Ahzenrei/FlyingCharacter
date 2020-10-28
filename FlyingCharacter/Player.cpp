@@ -6,13 +6,19 @@ Player::Player()
 {
 	posX = SCREEN_WIDTH / 2;
 	posY = SCREEN_HEIGHT / 2;
+
+	idleLeft = FileReader::getSpritesFromFile("SpriteCharacterLeft.txt", nbFrame, sizeY, sizeX);
+	idleRight = FileReader::getSpritesFromFile("SpriteCharacterRight.txt", nbFrame, sizeY, sizeX);
 }
 
 Player::Player(int x, int y)
 	:
 	posX(x),
 	posY(y)
-{}
+{
+	idleLeft = FileReader::getSpritesFromFile("SpriteCharacterLeft.txt", nbFrame, sizeY, sizeX);
+	idleRight = FileReader::getSpritesFromFile("SpriteCharacterRight.txt", nbFrame, sizeY, sizeX);
+}
 
 void Player::Move()
 {
@@ -89,7 +95,7 @@ void Player::ChangeFrame()
 	if (currentFrame >= frameToChange)
 	{
 		currentFrame = 0;
-		frame = !frame;
+		frame = (frame + 1)%nbFrame;
 	}
 
 }
